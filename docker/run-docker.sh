@@ -16,16 +16,6 @@ function usage_exit {
   cat <<_EOS_ 1>&2
   Usage: $PROG_NAME [OPTIONS...]
   OPTIONS:
-    -h, --help              このヘルプを表示
-    -c, --container         コンテナの名前を設定します．
-_EOS_
-    exit 1
-}
-
-function usage_exit {
-  cat <<_EOS_ 1>&2
-  Usage: $PROG_NAME [OPTIONS...]
-  OPTIONS:
     -h, --help                      このヘルプを表示
     -l, --launch {on|off}           runtime_managerの起動（既定値：${AUTOWARE_LAUNCH}）
     -p, --param FILE                読み込むAutowareの設定ファイルを指定
