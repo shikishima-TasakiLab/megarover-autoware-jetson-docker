@@ -10,6 +10,8 @@ RUN_DIR=$(dirname $(readlink -f $0))
 PARAM_YML="${RUN_DIR}/autoware-param/param_init.yaml"
 SAVE_PATH=""
 
+MEGAROVER_UDEV="/dev/ttyUSB-MegaRover"
+
 function usage_exit {
   cat <<_EOS_ 1>&2
   Usage: $PROG_NAME [OPTIONS...]
@@ -121,7 +123,7 @@ ACONF="/tmp/pulseaudio.client.conf"
 HOST_WS=$(dirname $(dirname $(readlink -f $0)))/catkin_ws
 HOST_SD=$(dirname $(dirname $(readlink -f $0)))/shared_dir
 
-cp ${PARAM_YML} ${RUN_DIR}/src-megarover/param.yaml
+cp ${PARAM_YML} ${RUN_DIR}/src-megarover/runtime_manager/param.yaml
 if [[ $? -eq 0 ]]; then
     echo "設定ファイル\"${SAVE_PATH}\"を使用します．"
 else
@@ -129,13 +131,27 @@ else
     usage_exit
 fi
 
+if [[ ! -c ${MEGAROVER_UDEV} ]]; then
+    echo "MegaRoverのUSBケーブルを接続してください．"
+    echo "それでもこの表示が出る場合は， \`sudo ${RUN_DIR}/megarover_udev.sh\` を実行してください．"
+    usage_exit
+fi
+
 DOCKER_VOLUME="-v ${XSOCK}:${XSOCK}:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${XAUTH}:${XAUTH}:rw"
-DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/param.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/param.yaml:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/param.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/param.yaml:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${HOST_WS}:/home/ros/catkin_ws:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${HOST_SD}:/home/ros/shared_dir:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${ASOCK}:${ASOCK}"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${ACONF}:/etc/pulse/client.conf"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${MEGAROVER_UDEV}:${MEGAROVER_UDEV}"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/computing.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/computing.yaml:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/data.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/data.yaml:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/interface.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/interface.yaml:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/map.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/map.yaml:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/sensing.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/sensing.yaml:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/setup.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/setup.yaml:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/run:/home/ros/autoware.ai/install/runtime_manager/share/runtime_manager/scripts/run:rw"
 
 DOCKER_ENV="-e XAUTHORITY=${XAUTH}"
 DOCKER_ENV="${DOCKER_ENV} -e DISPLAY=$DISPLAY"
@@ -156,9 +172,9 @@ fi
 if [[ ! -f ${ACONF} ]]; then
     touch ${ACONF}
     echo "default-server = unix:/tmp/pulseaudio.socket" > ${ACONF}
-    echo "autospawn = no" > ${ACONF}
-    echo "daemon-binary = /bin/true" > ${ACONF}
-    echo "enable-shm = false" > ${ACONF}
+    echo "autospawn = no" >> ${ACONF}
+    echo "daemon-binary = /bin/true" >> ${ACONF}
+    echo "enable-shm = false" >> ${ACONF}
 fi
 
 touch ${XAUTH}
@@ -176,14 +192,14 @@ docker run \
     ${DOCKER_IMAGE} \
     ${DOCKER_CMD}
 
-if [[ -f ${RUN_DIR}/src-megarover/param.yaml ]]; then
+if [[ -f ${RUN_DIR}/src-megarover/runtime_manager/param.yaml ]]; then
     if [[ ${SAVE_PATH} != "" ]]; then
-        cp ${RUN_DIR}/src-megarover/param.yaml ${SAVE_PATH}
+        cp ${RUN_DIR}/src-megarover/runtime_manager/param.yaml ${SAVE_PATH}
         if [[ $? -eq 0 ]]; then
             echo "設定ファイルを\"${SAVE_PATH}\"に保存しました．"
         else
             echo "設定ファイルを\"${SAVE_PATH}\"に保存できませんでした．"
         fi
     fi
-    rm ${RUN_DIR}/src-megarover/param.yaml
+    rm ${RUN_DIR}/src-megarover/runtime_manager/param.yaml
 fi

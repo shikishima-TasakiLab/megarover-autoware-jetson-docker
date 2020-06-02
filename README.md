@@ -3,9 +3,19 @@
 This is a package to run Vstone MegaRover from ROS & Autoware.
 
 ## Install
+
 ```bash
 #!/bin/bash
 git clone --recursive https://github.com/shikishima-TasakiLab/megarover-autoware-jetson-docker.git MegaRover-Autoware-Jetson
+
+cd MegaRover-Autoware-Jetson
+
+# Set aliases
+./docker/set_aliases.sh
+source ~/.bashrc
+
+# Connect the USB cable from the Mega Rover
+sudo ./docker/megarover_udev.sh
 ```
 
 ## Build Docker Image
@@ -17,14 +27,6 @@ git clone --recursive https://github.com/shikishima-TasakiLab/megarover-autoware
 |Option           |Parameter |Explanation        |Default|Example    |
 |-----------------|----------|-------------------|-------|-----------|
 |`-h`, `--help`   |(None)    |Display how to use |(None) |`-h`       |
-
-
-## Create Aliases
-
-```bash
-#!/bin/bash
-./docker/set_aliases.sh
-```
 
 ## Run Docker Image
 
