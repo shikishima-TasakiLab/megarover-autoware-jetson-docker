@@ -1,0 +1,44 @@
+# MegaRover-Autoware-Jetson
+
+This is a package to run Vstone MegaRover from ROS & Autoware.
+
+## Install
+```bash
+#!/bin/bash
+git clone --recursive https://github.com/shikishima-TasakiLab/megarover-autoware-jetson-docker.git MegaRover-Autoware-Jetson
+```
+
+## Build Docker Image
+
+```bash
+#!/bin/bash
+./docker/build-docker.sh
+```
+|Option           |Parameter |Explanation        |Default|Example    |
+|-----------------|----------|-------------------|-------|-----------|
+|`-h`, `--help`   |(None)    |Display how to use |(None) |`-h`       |
+
+
+## Run Docker Image
+
+```bash
+#!/bin/bash
+./docker/run-docker.sh
+```
+|Option           |Parameter |Explanation                                              |Default                                  |Example             |
+|-----------------|----------|---------------------------------------------------------|-----------------------------------------|--------------------|
+|`-h`, `--help`   |(None)    |Display how to use                                       |(None)                                   |`-h`                |
+|`-l`, `--launch` |{on\|off} |Launch "runtime_manager"                                 |`on`                                     |`-l off`            |
+|`-p`, `--param`  |FILE      |Specify Autoware configuration file to read              |`./docker/autoware-param/param_init.yaml`|`-p robot_1.yaml`   |
+|`-s`, `--save`   |FILE      |Specify the save destination of the Autoware setting file|(None)                                   |`-s robot_1.yaml`   |
+|`-n`, `--name`   |NAME      |Container name                                           |`autoware`                               |`-n autoware-master`|
+
+## Use Another Terminal
+
+```bash
+#!/bin/bash
+./Autoware-Jetson/docker/exec-docker.sh
+```
+|Option           |Parameter |Explanation        |Default|Example    |
+|-----------------|----------|-------------------|-------|-----------|
+|`-h`, `--help`   |(None)    |Display how to use |(None) |`-h`       |

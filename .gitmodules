@@ -1,0 +1,6 @@
+[submodule "docker/src-autoware"]
+	path = docker/src-autoware
+	url = https://github.com/shikishima-TasakiLab/autoware-jetson-docker.git
+[submodule "catkin_ws/src/megarover"]
+	path = catkin_ws/src/megarover
+	url = https://github.com/Meijo-TasakiLab/megarover.git
