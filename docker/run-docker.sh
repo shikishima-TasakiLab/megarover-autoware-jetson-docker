@@ -124,6 +124,7 @@ cp ${PARAM_YML} ${RUN_DIR}/src-megarover/param.yaml
 
 DOCKER_VOLUME="-v ${XSOCK}:${XSOCK}:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${XAUTH}:${XAUTH}:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/param.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/param.yaml:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${HOST_WS}:/home/ros/catkin_ws:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${HOST_SD}:/home/ros/shared_dir:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${ASOCK}:${ASOCK}"
