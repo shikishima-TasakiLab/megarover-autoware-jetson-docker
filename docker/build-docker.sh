@@ -78,3 +78,16 @@ if [[ $? != 0 ]]; then
     cd ${CURRENT_DIR}
     exit 1
 fi
+
+while true; do
+    read rmi \?"Dockerイメージ \"${AUTOWARE_IMAGE}\" のタグを削除しますか？ [y/N]"
+    case $rmi in
+        [Yy]* )
+            docker rmi ${AUTOWARE_IMAGE}
+            break;
+            ;;
+        '' | [Nn]* )
+            break;
+            ;;
+    esac
+done
