@@ -48,7 +48,7 @@ while (( $# > 0 )); do
         if [[ -f $2 ]]; then
             PARAM_YML=$2
         else
-            echo "無効なパラメータ： $1 $2"
+            echo "設定ファイル\"$2\"が存在しません．"
             usage_exit
         fi
         shift 2
@@ -120,7 +120,14 @@ ACONF="/tmp/pulseaudio.client.conf"
 
 HOST_WS=$(dirname $(dirname $(readlink -f $0)))/catkin_ws
 HOST_SD=$(dirname $(dirname $(readlink -f $0)))/shared_dir
+
 cp ${PARAM_YML} ${RUN_DIR}/src-megarover/param.yaml
+if [[ $? -eq 0 ]]; then
+    echo "設定ファイル\"${SAVE_PATH}\"を使用します．"
+else
+    echo "設定ファイル\"${SAVE_PATH}\"は使用できません．"
+    usage_exit
+fi
 
 DOCKER_VOLUME="-v ${XSOCK}:${XSOCK}:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${XAUTH}:${XAUTH}:rw"
@@ -172,6 +179,11 @@ docker run \
 if [[ -f ${RUN_DIR}/src-megarover/param.yaml ]]; then
     if [[ ${SAVE_PATH} != "" ]]; then
         cp ${RUN_DIR}/src-megarover/param.yaml ${SAVE_PATH}
+        if [[ $? -eq 0 ]]; then
+            echo "設定ファイルを\"${SAVE_PATH}\"に保存しました．"
+        else
+            echo "設定ファイルを\"${SAVE_PATH}\"に保存できませんでした．"
+        fi
     fi
     rm ${RUN_DIR}/src-megarover/param.yaml
 fi

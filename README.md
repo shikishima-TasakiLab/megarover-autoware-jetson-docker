@@ -19,11 +19,18 @@ git clone --recursive https://github.com/shikishima-TasakiLab/megarover-autoware
 |`-h`, `--help`   |(None)    |Display how to use |(None) |`-h`       |
 
 
+## Create Aliases
+
+```bash
+#!/bin/bash
+./docker/set_aliases.sh
+```
+
 ## Run Docker Image
 
 ```bash
 #!/bin/bash
-./docker/run-docker.sh
+autoware-run
 ```
 |Option           |Parameter |Explanation                                              |Default                                  |Example             |
 |-----------------|----------|---------------------------------------------------------|-----------------------------------------|--------------------|
@@ -37,7 +44,7 @@ git clone --recursive https://github.com/shikishima-TasakiLab/megarover-autoware
 
 ```bash
 #!/bin/bash
-./Autoware-Jetson/docker/exec-docker.sh
+autoware-exec
 ```
 |Option           |Parameter |Explanation        |Default|Example    |
 |-----------------|----------|-------------------|-------|-----------|
