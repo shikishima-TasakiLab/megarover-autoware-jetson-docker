@@ -115,9 +115,9 @@ HOST_SD=$(dirname $(dirname $(readlink -f $0)))/shared_dir
 
 cp ${PARAM_YML} ${RUN_DIR}/src-megarover/runtime_manager/param.yaml
 if [[ $? -eq 0 ]]; then
-    echo "設定ファイル\"${SAVE_PATH}\"を使用します．"
+    echo "設定ファイル\"${PARAM_YML}\"を使用します．"
 else
-    echo "設定ファイル\"${SAVE_PATH}\"は使用できません．"
+    echo "設定ファイル\"${PARAM_YML}\"は使用できません．"
     usage_exit
 fi
 
@@ -142,6 +142,8 @@ DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/map.
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/sensing.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/sensing.yaml:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/setup.yaml:/home/ros/autoware.ai/install/runtime_manager/lib/runtime_manager/setup.yaml:rw"
 DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/runtime_manager/run:/home/ros/autoware.ai/install/runtime_manager/share/runtime_manager/scripts/run:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/launch/velocity_set_option.launch:/home/ros/autoware.ai/install/waypoint_planner/share/waypoint_planner/launch/velocity_set_option.launch:rw"
+DOCKER_VOLUME="${DOCKER_VOLUME} -v ${RUN_DIR}/src-megarover/launch/astar_avoid.launch:/home/ros/autoware.ai/install/waypoint_planner/share/waypoint_planner/launch/astar_avoid.launch:rw"
 
 DOCKER_ENV="-e XAUTHORITY=${XAUTH}"
 DOCKER_ENV="${DOCKER_ENV} -e DISPLAY=$DISPLAY"

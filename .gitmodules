@@ -4,3 +4,6 @@
 [submodule "catkin_ws/src/megarover"]
 	path = catkin_ws/src/megarover
 	url = https://github.com/Meijo-TasakiLab/megarover.git
+[submodule "catkin_ws/src/megarover_samples"]
+	path = catkin_ws/src/megarover_samples
+	url = https://github.com/vstoneofficial/megarover_samples.git
